@@ -1,11 +1,11 @@
 #include "source.h"
 
-//SYMLINK ¹®ÀÚ¿­ Á¤ÀÇ 
+//SYMLINK ï¿½ï¿½ï¿½Ú¿ï¿½ ï¿½ï¿½ï¿½ï¿½ 
 #define SYMLINK L"\\DosDevices\\ioctltest"
 
 MAL_GLOBAL g_MalGlobal;
 
-//¿À·ù ¹«½Ã 
+//ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ 
 #pragma warning(push)
 #pragma warning(disable:4100)
 extern "C" NTSTATUS DriverEntry(
@@ -14,27 +14,27 @@ extern "C" NTSTATUS DriverEntry(
 
 	UNICODE_STRING   deviceSymLink;
 	UNICODE_STRING   deviceName;
-	UNICODE_STRING	 NtQuerySystemInformationName;
+	UNICODE_STRING	 ZwQuerySystemInformationName;
 	NTSTATUS retStatus = STATUS_SUCCESS;
 	PDEVICE_OBJECT deviceObject = NULL;
 
-	//¹Ì »ç¿ë ÆÄ¶ó¹ÌÅÍ¸¦ ¿¡·¯Ã³¸® ÇÏÁö ¾ÊÀ¸¸é ¿À·ù ¹ß»ý 
+	//ï¿½ï¿½ ï¿½ï¿½ï¿½ ï¿½Ä¶ï¿½ï¿½ï¿½Í¸ï¿½ ï¿½ï¿½ï¿½ï¿½Ã³ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ß»ï¿½ 
 	UNREFERENCED_PARAMETER(DriverObject);
 	UNREFERENCED_PARAMETER(RegistryPath);
-	//µð¹ö±× ¸Þ½ÃÁö Ãâ·Â
+	//ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Þ½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½
 	dmsg("Driver Loaded!");
 
-	//Àü¿ªº¯¼ö ±¸Á¶Ã¼ ÃÊ±âÈ­ 
+	//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½Ã¼ ï¿½Ê±ï¿½È­ 
 	RtlZeroMemory(&g_MalGlobal, sizeof(MAL_GLOBAL));
 
-	//±¸Á¶Ã¼¿¡ µå¶óÀÌ¹ö ¿ÀºêÁ§Æ® ÀúÀå 
+	//ï¿½ï¿½ï¿½ï¿½Ã¼ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½Ì¹ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ® ï¿½ï¿½ï¿½ï¿½ 
 	g_MalGlobal.DriverObject = DriverObject;
 
-	//À¯´ÏÄÚµå Å¸ÀÔ ¹®ÀÚ¿­ ÃÊ±âÈ­  -> IoCreateSymbolicLink ÇÔ¼ö ÀÎÀÚ·Î À¯´ÏÄÚµå Å¸ÀÔ ¹®ÀÚ¿­ ³Ñ¾î°¡¾ßÇÔ 
+	//ï¿½ï¿½ï¿½ï¿½ï¿½Úµï¿½ Å¸ï¿½ï¿½ ï¿½ï¿½ï¿½Ú¿ï¿½ ï¿½Ê±ï¿½È­  -> IoCreateSymbolicLink ï¿½Ô¼ï¿½ ï¿½ï¿½ï¿½Ú·ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Úµï¿½ Å¸ï¿½ï¿½ ï¿½ï¿½ï¿½Ú¿ï¿½ ï¿½Ñ¾î°¡ï¿½ï¿½ï¿½ï¿½ 
 	RtlInitUnicodeString(&deviceSymLink, SYMLINK);
 	RtlInitUnicodeString(&deviceName, L"\\Device\\testName");
 
-	//PDEVICE_OBJECT »ý¼º 
+	//PDEVICE_OBJECT ï¿½ï¿½ï¿½ï¿½ 
 	retStatus = IoCreateDevice(
 		DriverObject,
 		0,
@@ -44,27 +44,27 @@ extern "C" NTSTATUS DriverEntry(
 		FALSE,
 		&deviceObject);
 
-	//NTSTATUS °á°ú SUCCESS ÀÎÁö °Ë»ç 
+	//NTSTATUS ï¿½ï¿½ï¿½ SUCCESS ï¿½ï¿½ï¿½ï¿½ ï¿½Ë»ï¿½ 
 	if (!NT_SUCCESS(retStatus)) {
 		dmsg("IoCreateDevice Fail!");
 		return retStatus;
 	}
 
-	//±¸Á¶Ã¼¿¡ µð¹ÙÀÌ½º ¿ÀºêÁ§Æ® ÀúÀå 
+	//ï¿½ï¿½ï¿½ï¿½Ã¼ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½Ì½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ® ï¿½ï¿½ï¿½ï¿½ 
 	g_MalGlobal.DeviceObject = deviceObject;
 
-	//½Éº¼¸¯ ¸µÅ© »ý¼º 
+	//ï¿½Éºï¿½ï¿½ï¿½ ï¿½ï¿½Å© ï¿½ï¿½ï¿½ï¿½ 
 	retStatus = IoCreateSymbolicLink(&deviceSymLink, &deviceName);
 
-	//NTSTATUS °á°ú SUCCESS ÀÎÁö °Ë»ç 
+	//NTSTATUS ï¿½ï¿½ï¿½ SUCCESS ï¿½ï¿½ï¿½ï¿½ ï¿½Ë»ï¿½ 
 	if (!NT_SUCCESS(retStatus)) {
 		dmsg("IoCreateSymLink Fail!");
 		return retStatus;
 	}
 
-	//NtQuerySystemInformation ÇÔ¼ö Æ÷ÀÎÅÍ °¡Á®¿À±â 
-	RtlInitUnicodeString(&NtQuerySystemInformationName, L"ZwQuerySystemInformation");
-	NtQuerySystemInformation = (NtQuerySystemInformation_t) MmGetSystemRoutineAddress(&NtQuerySystemInformationName);
+	//NtQuerySystemInformation ï¿½Ô¼ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ 
+	RtlInitUnicodeString(&ZwQuerySystemInformationName, L"ZwQuerySystemInformation");
+	NtQuerySystemInformation = (NtQuerySystemInformation_t) MmGetSystemRoutineAddress(&ZwQuerySystemInformationName);
 	if (NtQuerySystemInformation) {
 		dmsg("Get NtQuerySystemInformation Pointer Success");
 		DbgPrintEx(DPFLTR_IHVDRIVER_ID, 0, "===== Function Address : %lp ====== \n", NtQuerySystemInformation);
@@ -79,29 +79,29 @@ extern "C" NTSTATUS DriverEntry(
 	return 0;
 }
 
-//ÇÁ·Î¼¼½º ¸ñ·Ï °¡Á®¿À´Â ÇÔ¼ö 
+//ï¿½ï¿½ï¿½Î¼ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ô¼ï¿½ 
 void getProcessList() {
 	NTSTATUS retStatus = STATUS_SUCCESS;
 	ULONG BufferSize = 0;
 
-	//Àü´Þ¹ÞÀ» µ¥ÀÌÅÍ Å©±â ±¸ÇÔ
+	//ï¿½ï¿½ï¿½Þ¹ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ Å©ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
 	retStatus = NtQuerySystemInformation((SYSTEM_INFORMATION_CLASS)SystemProcessInformation, NULL, 0, &BufferSize);
 	DbgPrintEx(DPFLTR_IHVDRIVER_ID, 0, "===== Sysinfo Class : %d ====== \n", (SYSTEM_INFORMATION_CLASS)SystemProcessInformation);
 	DbgPrintEx(DPFLTR_IHVDRIVER_ID, 0, "===== BufferSize : %ld ====== \n", BufferSize);
 	DbgPrintEx(DPFLTR_IHVDRIVER_ID, 0, "===== NT RETURN : %x ====== \n", retStatus);
-	//¹ÝÈ¯°ª Ã¼Å© 
+	//ï¿½ï¿½È¯ï¿½ï¿½ Ã¼Å© 
 	if (retStatus == STATUS_INFO_LENGTH_MISMATCH) {
 		dmsg("Get Buffer Size Complete!");
 		if (BufferSize) {
-			//Ä¿³Î ¸Þ¸ð¸® µ¿ÀûÇÒ´ç 
+			//Ä¿ï¿½ï¿½ ï¿½Þ¸ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ò´ï¿½ 
 			PVOID PoolMem = ExAllocatePoolWithTag(PagedPool, BufferSize, POOL_TAG);
 			dmsg("Pool Memory Complete !");
 			if (PoolMem) {
-				//µ¥ÀÌÅÍ Àü´Þ¹ÞÀ½ 
+				//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Þ¹ï¿½ï¿½ï¿½ 
 				retStatus = NtQuerySystemInformation((SYSTEM_INFORMATION_CLASS)SystemProcessInformation, PoolMem, BufferSize, &BufferSize);
 				if (NT_SUCCESS(retStatus))				{
 					dmsg("Get Process Info Complete!");
-					//ÇÒ´çÇÑ ¸Þ¸ð¸® °ø°£ SYSTEM_PROCESS_INFORMATION ±¸Á¶Ã¼¿¡ ´ëÀÔ 
+					//ï¿½Ò´ï¿½ï¿½ï¿½ ï¿½Þ¸ï¿½ ï¿½ï¿½ï¿½ï¿½ SYSTEM_PROCESS_INFORMATION ï¿½ï¿½ï¿½ï¿½Ã¼ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ 
 					SYSTEM_PROCINFO *ProcessEntry = (SYSTEM_PROCINFO*)PoolMem;
 					do {
 						if (ProcessEntry->ImageName.Length) {
@@ -123,18 +123,18 @@ void getActiveProcessLinks(long int targetPID) {
 
 	ActiveProcessLinkAddress = getAPLAbyPID(targetPID);
 
-	//Àü´Þ¹ÞÀ» µ¥ÀÌÅÍ Å©±â ±¸ÇÔ
+	//ï¿½ï¿½ï¿½Þ¹ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ Å©ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
 	retStatus = NtQuerySystemInformation((SYSTEM_INFORMATION_CLASS)SystemProcessInformation, NULL, 0, &BufferSize);
-	//¹ÝÈ¯°ª Ã¼Å© 
+	//ï¿½ï¿½È¯ï¿½ï¿½ Ã¼Å© 
 	if (retStatus == STATUS_INFO_LENGTH_MISMATCH) {
 		if (BufferSize) {
-			//Ä¿³Î ¸Þ¸ð¸® µ¿ÀûÇÒ´ç 
+			//Ä¿ï¿½ï¿½ ï¿½Þ¸ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ò´ï¿½ 
 			PVOID PoolMem = ExAllocatePoolWithTag(PagedPool, BufferSize, POOL_TAG);
 			if (PoolMem) {
-				//µ¥ÀÌÅÍ Àü´Þ¹ÞÀ½ 
+				//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Þ¹ï¿½ï¿½ï¿½ 
 				retStatus = NtQuerySystemInformation((SYSTEM_INFORMATION_CLASS)SystemProcessInformation, PoolMem, BufferSize, &BufferSize);
 				if (NT_SUCCESS(retStatus)) {
-					//ÇÒ´çÇÑ ¸Þ¸ð¸® °ø°£ SYSTEM_PROCESS_INFORMATION ±¸Á¶Ã¼¿¡ ´ëÀÔ 
+					//ï¿½Ò´ï¿½ï¿½ï¿½ ï¿½Þ¸ï¿½ ï¿½ï¿½ï¿½ï¿½ SYSTEM_PROCESS_INFORMATION ï¿½ï¿½ï¿½ï¿½Ã¼ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ 
 					SYSTEM_PROCINFO* ProcessEntry = (SYSTEM_PROCINFO*)PoolMem;
 					do {
 						if (ProcessEntry->ImageName.Length) {
@@ -163,7 +163,7 @@ long long int getAPLAbyPID(long int targetPID) {
 
 	int offset;
 
-	//PsLookupProcessByProcessId ÇÔ¼ö Æ÷ÀÎÅÍ °¡Á®¿À±â 
+	//PsLookupProcessByProcessId ï¿½Ô¼ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ 
 	RtlInitUnicodeString(&targetFName, L"PsLookupProcessByProcessId");
 	PsLookupProcessByProcessId = (PsLookupProcessByProcessId_t)MmGetSystemRoutineAddress(&targetFName);
 	if (PsLookupProcessByProcessId) {
@@ -180,25 +180,25 @@ long long int getAPLAbyPID(long int targetPID) {
 	else
 		dmsg("PsLookupProcessByProcessId fail");
 
-	//PsGetProcessId ÇÔ¼ö Æ÷ÀÎÅÍ °¡Á®¿À±â 
+	//PsGetProcessId ï¿½Ô¼ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ 
 	RtlInitUnicodeString(&targetFName, L"PsGetProcessId");
 	PsGetProcessId = MmGetSystemRoutineAddress(&targetFName);
 	DbgPrintEx(DPFLTR_IHVDRIVER_ID, 0, "===== PsGetProcssId ADDRESS : %p ====== \n", (PsGetProcessId));
 	
-	//PsGetProcessId ÇÔ¼ö ½ÃÀÛÁÖ¼ÒºÎÅÍ 3¹ÙÀÌÆ® À§Ä¡¿¡¼­ 2¹ÙÀÌÆ® °¡Á®¿È
-	//PEPROCESS ½ÃÀÛÁÖ¼Ò·ÎºÎÅÍ ÇØ´ç 2¹ÙÀÌÆ®¸¸Å­ ¿ÀÇÁ¼Â ¶³¾îÁø °÷¿¡ UniqueProcessId ÁÖ¼Ò µé¾îÀÖÀ½ 
+	//PsGetProcessId ï¿½Ô¼ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ö¼Òºï¿½ï¿½ï¿½ 3ï¿½ï¿½ï¿½ï¿½Æ® ï¿½ï¿½Ä¡ï¿½ï¿½ï¿½ï¿½ 2ï¿½ï¿½ï¿½ï¿½Æ® ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+	//PEPROCESS ï¿½ï¿½ï¿½ï¿½ï¿½Ö¼Ò·Îºï¿½ï¿½ï¿½ ï¿½Ø´ï¿½ 2ï¿½ï¿½ï¿½ï¿½Æ®ï¿½ï¿½Å­ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ UniqueProcessId ï¿½Ö¼ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ 
 	offsetPointer = (PVOID*)((long long int)PsGetProcessId + 3);
-	//UniqueProcessId ·ÎºÎÅÍ 8¹ÙÀÌÆ® ¶³¾îÁø À§Ä¡°¡ ActiveProcessLinkAddress
+	//UniqueProcessId ï¿½Îºï¿½ï¿½ï¿½ 8ï¿½ï¿½ï¿½ï¿½Æ® ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Ä¡ï¿½ï¿½ ActiveProcessLinkAddress
 	offset = (short)*offsetPointer + 8;
 	
-	//ActiveProcessLinkAddress °¡Á®¿È
+	//ActiveProcessLinkAddress ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 	APLA = (PLIST_ENTRY)((long long int)getPEP + offset);
 	DbgPrintEx(DPFLTR_IHVDRIVER_ID, 0, "===== FLINK : %p ====== \n", (APLA->Flink));
 	DbgPrintEx(DPFLTR_IHVDRIVER_ID, 0, "===== BLINK : %p ====== \n", (APLA->Blink));
 
-	//°¢ ÇÁ·Î¼¼½ºº° Flink , Blink ±³Ã¼
-	//Flink µû¶ó°¡¼­ ÇØ´ç ÇÁ·Î¼¼½ºÀÇ Blink¸¦ ÇöÀç ÇÁ·Î¼¼½ºÀÇ Blink·Î ±³Ã¼
-	//Blink µû¶ó°¡¼­ ÇØ´ç ÇÁ·Î¼¼½ºÀÇ Flink¸¦ ÇöÀç ÇÁ·Î¼¼½ºÀÇ Flink·Î ±³Ã¼
+	//ï¿½ï¿½ ï¿½ï¿½ï¿½Î¼ï¿½ï¿½ï¿½ï¿½ï¿½ Flink , Blink ï¿½ï¿½Ã¼
+	//Flink ï¿½ï¿½ï¿½ó°¡¼ï¿½ ï¿½Ø´ï¿½ ï¿½ï¿½ï¿½Î¼ï¿½ï¿½ï¿½ï¿½ï¿½ Blinkï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Î¼ï¿½ï¿½ï¿½ï¿½ï¿½ Blinkï¿½ï¿½ ï¿½ï¿½Ã¼
+	//Blink ï¿½ï¿½ï¿½ó°¡¼ï¿½ ï¿½Ø´ï¿½ ï¿½ï¿½ï¿½Î¼ï¿½ï¿½ï¿½ï¿½ï¿½ Flinkï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Î¼ï¿½ï¿½ï¿½ï¿½ï¿½ Flinkï¿½ï¿½ ï¿½ï¿½Ã¼
 	tmpNode = APLA->Flink;
 	tmpNode->Blink = APLA->Blink;
 	tmpNode = APLA->Blink;
@@ -208,23 +208,23 @@ long long int getAPLAbyPID(long int targetPID) {
 }
 
 
-//µå¶óÀÌ¹ö ¾ð·Îµå ÇÔ¼ö 
+//ï¿½ï¿½ï¿½ï¿½Ì¹ï¿½ ï¿½ï¿½Îµï¿½ ï¿½Ô¼ï¿½ 
 void UnloadMyDriver(PDRIVER_OBJECT DriverObject) {
 	dmsg("Driver Unloaded!");
 	if (g_MalGlobal.DeviceObject != nullptr)
 	{
-		//½Éº¼¸¯ ¸µÅ© °ª ÃÊ±âÈ­ ÇØÁÖ°í º¯¼ö ÇÒ´ç ÇØÁ¦
+		//ï¿½Éºï¿½ï¿½ï¿½ ï¿½ï¿½Å© ï¿½ï¿½ ï¿½Ê±ï¿½È­ ï¿½ï¿½ï¿½Ö°ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Ò´ï¿½ ï¿½ï¿½ï¿½ï¿½
 		UNICODE_STRING Symlink = { 0, };
 		RtlInitUnicodeString(&Symlink, SYMLINK);
 		IoDeleteSymbolicLink(&Symlink);
 
-		//µð¹ÙÀÌ½º ¿ÀºêÁ§Æ® »èÁ¦ 
+		//ï¿½ï¿½ï¿½ï¿½Ì½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ® ï¿½ï¿½ï¿½ï¿½ 
 		IoDeleteDevice(g_MalGlobal.DeviceObject);
 	}
 	return ;
 }
 
-//IOCTL ´ëÀÀ ÇÔ¼ö 
+//IOCTL ï¿½ï¿½ï¿½ï¿½ ï¿½Ô¼ï¿½ 
 NTSTATUS myIOCTL(IN PDEVICE_OBJECT DeviceObject, IN PIRP irp) {
 	PIO_STACK_LOCATION pStack;
 	NTSTATUS retStatus = STATUS_SUCCESS;
@@ -234,32 +234,32 @@ NTSTATUS myIOCTL(IN PDEVICE_OBJECT DeviceObject, IN PIRP irp) {
 	PWCHAR OutMsg = L"Message from driver\n";
 	ULONG InBufLength,OutBufLength,OutMsgLength;
 
-	//IRP ³»ºÎ¿¡ Á¸ÀçÇÏ´Â IO½ºÅÃ Æ÷ÀÎÅÍÀ§Ä¡ ¹ÝÈ¯ 
+	//IRP ï¿½ï¿½ï¿½Î¿ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ï´ï¿½ IOï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä¡ ï¿½ï¿½È¯ 
 	pStack = IoGetCurrentIrpStackLocation(irp);
 
 	InBufLength = pStack->Parameters.DeviceIoControl.InputBufferLength;
 	OutBufLength = pStack->Parameters.DeviceIoControl.OutputBufferLength;
 
-	//À¯Àú ¾îÇÃ¸®ÄÉÀÌ¼Ç¿¡¼­ Àü´ÞÇÑ ÄÁÆ®·Ñ ÄÚµå Ã£¾Æ¿È
+	//ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Ã¸ï¿½ï¿½ï¿½ï¿½Ì¼Ç¿ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Æ®ï¿½ï¿½ ï¿½Úµï¿½ Ã£ï¿½Æ¿ï¿½
 	ControlCode = pStack->Parameters.DeviceIoControl.IoControlCode;
 
-	//ÄÁÆ®·Ñ ÄÚµå¿¡ µû¸¥ µ¿ÀÛ ´ëÀÀ
+	//ï¿½ï¿½Æ®ï¿½ï¿½ ï¿½Úµå¿¡ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
 	switch (ControlCode) {
 	case IOCTL_MESSAGE:
 		dmsg("IOCTL EVENT!");
 
-		//À¯Àú¿¡¼­ ³Ñ¾î¿Â ¸Þ½ÃÁö 
+		//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ñ¾ï¿½ï¿½ ï¿½Þ½ï¿½ï¿½ï¿½ 
 		InBuf = (PWCHAR) irp->AssociatedIrp.SystemBuffer;
 
 		DbgPrintEx(DPFLTR_IHVDRIVER_ID, 0, "===== DATA FROM USER : %S ====== \n", InBuf);
 		DbgPrintEx(DPFLTR_IHVDRIVER_ID, 0, "===== MESSAGE LENGTH : %d ====== \n", InBufLength);
 		
 		OutMsgLength = (ULONG) wcslen(OutMsg)*2 +1;
-		//À¯Àú·Î ³Ñ±æ ¸Þ½ÃÁö 
+		//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ñ±ï¿½ ï¿½Þ½ï¿½ï¿½ï¿½ 
 		OutBuf = (PWCHAR) irp->AssociatedIrp.SystemBuffer;
-		//¸Þ½ÃÁö º¹»ç 
+		//ï¿½Þ½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ 
 		RtlCopyBytes(OutBuf, OutMsg, OutBufLength);
-		//Àü´Þ¹ÞÀº outbufLen°ú ½ÇÁ¦ Àü´ÞµÉ ¹®ÀÚ¿­ÀÇ ±æÀÌ ºñ±³ÇÏ¿© Àü´ÞµÉ ¸Þ½ÃÁö ±æÀÌ Á¶Á¤
+		//ï¿½ï¿½ï¿½Þ¹ï¿½ï¿½ï¿½ outbufLenï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Þµï¿½ ï¿½ï¿½ï¿½Ú¿ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Ï¿ï¿½ ï¿½ï¿½ï¿½Þµï¿½ ï¿½Þ½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
 		irp->IoStatus.Information = (OutBufLength < OutMsgLength? OutBufLength : OutMsgLength);
 
 		break;
@@ -269,7 +269,7 @@ NTSTATUS myIOCTL(IN PDEVICE_OBJECT DeviceObject, IN PIRP irp) {
 		break;
 	case IOCTL_PROCINFO : 
 		dmsg("PROCINFO!");
-		//À¯Àú¿¡¼­ ³Ñ¾î¿Â ¸Þ½ÃÁö 
+		//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ñ¾ï¿½ï¿½ ï¿½Þ½ï¿½ï¿½ï¿½ 
 		InBuf = (PWCHAR)irp->AssociatedIrp.SystemBuffer;
 
 		DbgPrintEx(DPFLTR_IHVDRIVER_ID, 0, "===== DATA FROM USER : %S ====== \n", InBuf);
@@ -278,23 +278,23 @@ NTSTATUS myIOCTL(IN PDEVICE_OBJECT DeviceObject, IN PIRP irp) {
 		break;
 	}
 
-	//IRP µ¿ÀÛ ¿Ï·á Ã³¸® ÇÔ¼ö 
+	//IRP ï¿½ï¿½ï¿½ï¿½ ï¿½Ï·ï¿½ Ã³ï¿½ï¿½ ï¿½Ô¼ï¿½ 
 	IoCompleteRequest(irp, IO_NO_INCREMENT);
 
 	return retStatus;
 }
 
-//Create ´ëÀÀ ÇÔ¼ö - ÇÔ¼öµ¿ÀÛ ¼º°ø½Ã STATUS_SUCESS¸¦ ¹ÝÈ¯ÇØÁÖ¾î¾ß ÇÑ´Ù. 
+//Create ï¿½ï¿½ï¿½ï¿½ ï¿½Ô¼ï¿½ - ï¿½Ô¼ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ STATUS_SUCESSï¿½ï¿½ ï¿½ï¿½È¯ï¿½ï¿½ï¿½Ö¾ï¿½ï¿½ ï¿½Ñ´ï¿½. 
 NTSTATUS createHandler(IN PDEVICE_OBJECT DeviceObject, IN PIRP irp) {
-	//I/O »óÅÂ º¯°æ 
+	//I/O ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ 
 	irp->IoStatus.Status = STATUS_SUCCESS;
 
-	//IRP µ¿ÀÛ ¿Ï·á Ã³¸® ÇÔ¼ö 
+	//IRP ï¿½ï¿½ï¿½ï¿½ ï¿½Ï·ï¿½ Ã³ï¿½ï¿½ ï¿½Ô¼ï¿½ 
 	IoCompleteRequest(irp, IO_NO_INCREMENT);
 	
 	dmsg("CREATE EVENT!");
 	return STATUS_SUCCESS;
 }
 
-//ÄÄÆÄÀÏ/ºôµå ¿À·ù ¹«½Ã  -> UNREFERENCED_PARAMETER(DriverObject) ¾È½áµµµÊ
+//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½/ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½  -> UNREFERENCED_PARAMETER(DriverObject) ï¿½È½áµµï¿½ï¿½
 #pragma warning(pop)

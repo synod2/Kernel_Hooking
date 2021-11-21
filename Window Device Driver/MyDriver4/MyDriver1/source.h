@@ -9,35 +9,35 @@
 #define POOL_TAG '1gaT'
 #define _CRT_SECURE_NO_WARNINGS
 
-// IOCTL ÄÚµå Á¤ÀÇ 
+// IOCTL ï¿½Úµï¿½ ï¿½ï¿½ï¿½ï¿½ 
 #define IOCTL_MESSAGE CTL_CODE(FILE_DEVICE_UNKNOWN,0x888,METHOD_BUFFERED,FILE_ANY_ACCESS)
 #define IOCTL_PROCLIST CTL_CODE(FILE_DEVICE_UNKNOWN,0x999,METHOD_BUFFERED,FILE_ANY_ACCESS)
 #define IOCTL_PROCINFO CTL_CODE(FILE_DEVICE_UNKNOWN,0xAAA,METHOD_BUFFERED,FILE_ANY_ACCESS)
 
 DRIVER_UNLOAD UnloadMyDriver;
 
-//IRP Major ´ëÀÀ ÇÔ¼ö µå¶óÀÌ¹ö µð½ºÆÐÄ¡ Á¤ÀÇ 
+//IRP Major ï¿½ï¿½ï¿½ï¿½ ï¿½Ô¼ï¿½ ï¿½ï¿½ï¿½ï¿½Ì¹ï¿½ ï¿½ï¿½ï¿½ï¿½Ä¡ ï¿½ï¿½ï¿½ï¿½ 
 _Dispatch_type_(IRP_MJ_DEVICE_CONTROL)
 DRIVER_DISPATCH myIOCTL;
 _Dispatch_type_(IRP_MJ_CREATE)
 DRIVER_DISPATCH createHandler;
 
-//DBGPRINT WRAPPING ÇÔ¼ö
+//DBGPRINT WRAPPING ï¿½Ô¼ï¿½
 ULONG dmsg(PCHAR msg) {
 	ULONG ret;
 	ret = DbgPrintEx(DPFLTR_IHVDRIVER_ID, 0, "===== DRIVER MESSAGE : %s ====== \n",msg);
 	return ret;
 };
 
-//NtQuerySystemInformation ÇÔ¼ö¿øÇü ¼±¾ð
-typedef NTSTATUS(*NTAPI NtQuerySystemInformation_t)(
+//ZwQuerySystemInformation ï¿½Ô¼ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
+typedef NTSTATUS(*NTAPI ZwQuerySystemInformation_t)(
     ULONG SystemInforationClass,
     PVOID SystemInformation,
     ULONG SystemInformationLength,
     PULONG ReturnLength
 );
 
-NtQuerySystemInformation_t (NtQuerySystemInformation) = nullptr;
+ZwQuerySystemInformation_t (ZwQuerySystemInformation) = nullptr;
 
 typedef NTSTATUS(*NTAPI PsLookupProcessByProcessId_t)(
     long int    ProcessId,
@@ -49,7 +49,7 @@ PsLookupProcessByProcessId_t (PsLookupProcessByProcessId) = nullptr;
 void getProcessList();
 long long int getAPLAbyPID(long int targetPID);
 
-//---------------------±¸Á¶Ã¼ ¼±¾ð------------------------------
+//---------------------ï¿½ï¿½ï¿½ï¿½Ã¼ ï¿½ï¿½ï¿½ï¿½------------------------------
 
 typedef enum _SYSTEM_INFORMATION_CLASS {
     SystemBasicInformation = 0,
@@ -100,7 +100,7 @@ typedef struct _SYSTEM_PROCESS_INFORMATION {
 //-------------------------------------------------------------
 
 
-//Àü¿ªÀûÀ¸·Î È°¿ëÇÒ ¿ÀºêÁ§Æ®³ª º¯¼öµéÀ» À§ÇØ ±¸Á¶Ã¼ ¼±¾ðÇÏ¿© »ç¿ë. 
+//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ È°ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ®ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½Ã¼ ï¿½ï¿½ï¿½ï¿½ï¿½Ï¿ï¿½ ï¿½ï¿½ï¿½. 
 typedef struct _MAL_GLBOAL {
 	PDRIVER_OBJECT DriverObject;
 	PDEVICE_OBJECT DeviceObject;
