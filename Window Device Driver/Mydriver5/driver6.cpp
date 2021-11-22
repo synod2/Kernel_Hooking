@@ -1,5 +1,5 @@
 ﻿
-//Process Hide 탐지 
+//Process Hide (DKOM) 탐지 
 #include "source.h"
 
 //SYMLINK 문자열 정의 
